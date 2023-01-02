@@ -11,15 +11,15 @@
 </head>
 <body>
     <div class="container">
-        <form action="#" method="POST" id="form">
+        <form action="" method="POST" id="form">
             <label for="username">Username:</label>
-            <input type="text" name="username" id="username">
+            <input type="text" name="username" id="username" pattern=".{3,}" required>
 
             <label for="password">Password:</label>
-            <input type="password" name="password" id="password">
+            <input type="password" name="password" id="password" required>
 
             <label for="email">Email:</label>
-            <input type="email" name="email" id="email">
+            <input type="email" name="email" id="email" required>
 
             <button type="submit" name="submit" id="submit">Submit</button>
 
@@ -32,8 +32,19 @@ $(document).ready(function(){
     $("#form").submit(function(event) {
         var username = $("#username").val();
         var password = $("#password").val();
+        var passwordReg = /^(?=[a-zA-Z])(?=.*\d)[A-Za-z\d]{8,16}$/;
+        if ( !passwordReg.test( password )){
+            event.preventDefault();
+            alert('Please insert valid password containing letters and numbers. Min Length of 7 chars, Max of 16.');
+            return false;
+        }
         var email = $("#email").val();
-        event.preventDefault();
+        var emailReg = /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/;
+        if ( !emailReg.test( email ) ) {
+            event.preventDefault();
+            alert('Please enter valid email');
+            return false;
+        }
         $.ajax({
             type: "POST",
             url: 'script.php',
@@ -44,7 +55,7 @@ $(document).ready(function(){
                 email: email 
             },
             success: function(data){
-                console.log(data);
+                window.location.reload();
             },
             error: function(xhr, status, error){
                 console.log(xhr);
