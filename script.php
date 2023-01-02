@@ -1,7 +1,12 @@
 <?php
 
-$data['username'] = $_POST['username'];
+require_once 'config.php';
+require_once 'Database.php';
 
-echo $data['username'];
+$username = $_POST['username'];
+$password = $_POST['password'];
+$email = $_POST['email'];
 
-echo "hi";
+$db = new Database($pdo);
+$rows = $db->getUsers();
+$db->insertUser($username, $password, $email);

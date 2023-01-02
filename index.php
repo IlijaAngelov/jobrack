@@ -11,7 +11,7 @@
 </head>
 <body>
     <div class="container">
-        <form action="signupForm.php" method="POST">
+        <form action="#" method="POST" id="form">
             <label for="username">Username:</label>
             <input type="text" name="username" id="username">
 
@@ -29,24 +29,27 @@
 </html>
 <script>
 $(document).ready(function(){
-    // $("#submit").click(function() {
-    //     console.log('clik');
-    //     return false;
-    // });
-    var username = $("#username").val();
-    console.log(username);
-    $.ajax({
-        type: "POST",
-        url: 'script.php',
-        data: {
-            username: username 
-        },
-        success: function(data){
-            console.log(data);
-        },
-        error: function(xhr, status, error){
-            console.log(xhr);
-        }
+    $("#form").submit(function(event) {
+        var username = $("#username").val();
+        var password = $("#password").val();
+        var email = $("#email").val();
+        event.preventDefault();
+        $.ajax({
+            type: "POST",
+            url: 'script.php',
+            dataType: 'json',
+            data: {
+                username: username,
+                password: password,
+                email: email 
+            },
+            success: function(data){
+                console.log(data);
+            },
+            error: function(xhr, status, error){
+                console.log(xhr);
+            }
+        });
     });
 });
 </script>
