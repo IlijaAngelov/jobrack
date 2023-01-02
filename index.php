@@ -1,17 +1,3 @@
-<?php 
-
-ini_set('display_errors', 1); ini_set('display_startup_errors', 1); error_reporting(E_ALL);
-
-require_once 'config.php';
-
-require_once 'Database.php';
-
-$db = new Database($pdo);
-$rows = $db->getUsers();
-// $db->insertUser($username, $password, $email);
-var_dump($rows);
-
-?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
