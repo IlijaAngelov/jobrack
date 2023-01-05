@@ -7,6 +7,10 @@ $username = $_POST['username'];
 $password = $_POST['password'];
 $email = $_POST['email'];
 
-$db = new Database($pdo);
-$db->insertUser($username, $password, $email);
-header("Location: index.php");
+if ($_POST['type'] === "checkDuplicate") {
+    $checkUser = new Database($pdo);
+    $result = $checkUser->checkDuplicateUsername($username);
+} else if($_POST['type'] == "insertUser") {
+    $db = new Database($pdo);
+    $db->insertUser($username, $password, $email); 
+}

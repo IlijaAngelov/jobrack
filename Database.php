@@ -26,6 +26,20 @@ class Database {
             print_r($stmt->errorInfo());
         } 
     }
+
+    public function checkDuplicateUsername($username)
+    {
+        $sql = "SELECT * FROM `users` WHERE (username) = :username";
+        $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->bindParam(':username', $username);
+        if(!$stmt->execute()) {
+            print_r($stmt->errorInfo());
+        }
+        if($stmt->fetchColumn() > 0) {
+            echo "Username taken!";
+        }
+    }
 }
 
 ?>

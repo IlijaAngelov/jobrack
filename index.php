@@ -1,3 +1,5 @@
+<!-- Validation for Duplicate Users/ -->
+<!-- Improve Form UI -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -30,12 +32,14 @@
 <script>
 $(document).ready(function(){
     $("#form").submit(function(event) {
+        event.preventDefault();
+
         var username = $("#username").val();
         var password = $("#password").val();
         var passwordReg = /^(?=[a-zA-Z])(?=.*\d)[A-Za-z\d]{8,16}$/;
         if ( !passwordReg.test( password )){
             event.preventDefault();
-            alert('Please insert valid password containing letters and numbers. Min Length of 7 chars, Max of 16.');
+            alert('Please insert valid password containing letters and numbers between 7 and 16 characters!');
             return false;
         }
         var email = $("#email").val();
@@ -45,22 +49,45 @@ $(document).ready(function(){
             alert('Please enter valid email');
             return false;
         }
+
         $.ajax({
             type: "POST",
-            url: 'script.php',
-            dataType: 'json',
+            url: "script.php",
             data: {
+                type: "checkDuplicate",
                 username: username,
                 password: password,
                 email: email 
-            },
-            success: function(data){
-                window.location.reload();
-            },
-            error: function(xhr, status, error){
-                console.log(xhr);
             }
-        });
+        })
+            .done(function(response){
+                if(response == '') {
+                    $.ajax({
+                        type: "POST",
+                        url: "script.php",
+                        data: {
+                            type: "insertUser",
+                            username: username,
+                            password: password,
+                            email: email 
+                        }
+                    })
+                    .done(function(response){
+                        alert("The signup was successful");
+                        location.reload();
+                    })
+                    .fail(function(xhr, status, error){
+                        alert('Request Status: ' + xhr.status + ' Status Text: ' + xhr.statusText + ' ' + xhr.responseText);
+                        event.preventDefault();
+                    });
+                } else {
+                    alert('Username taken!');
+                }
+            })
+            .fail(function(xhr, status, error){
+                alert('Request Status: ' + xhr.status + ' Status Text: ' + xhr.statusText + ' ' + xhr.responseText);
+                event.preventDefault();
+            });
     });
 });
 </script>
