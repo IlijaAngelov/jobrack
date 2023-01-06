@@ -15,11 +15,12 @@ class Database {
 
     function insertUser($username, $password, $email)
     {
+        $hashedPassword = password_hash("$password", PASSWORD_DEFAULT);
         $sql = "INSERT INTO `users` (`username`, `password`, `email`) VALUES (:username, :password, :email)";
         $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
         $stmt = $this->pdo->prepare($sql);
         $stmt->bindParam(':username', $username);
-        $stmt->bindParam(':password', $password);
+        $stmt->bindParam(':password', $hashedPassword);
         $stmt->bindParam(':email', $email);
 
         if(!$stmt->execute()) {

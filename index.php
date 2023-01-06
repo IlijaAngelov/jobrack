@@ -1,5 +1,3 @@
-<!-- Validation for Duplicate Users/ -->
-<!-- Improve Form UI -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
